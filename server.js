@@ -14,7 +14,10 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 const mongoUrl = process.env.MONGODB_URI || 'mongodb+srv://Ishita:<db_password>@cluster0.yvd0lxn.mongodb.net/weatherDB?retryWrites=true&w=majority&appName=Cluster0';
-const client = new MongoClient(mongoUrl);
+const client = new MongoClient(mongoUrl, {
+  serverApi: { version: '1', strict: true, deprecationErrors: true },
+  tls: true
+})
 const dbName = 'weatherDB';
 
 let db;
