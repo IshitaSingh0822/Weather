@@ -13,7 +13,7 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-const mongoUrl = process.env.MONGODB_URI || 'mongodb://localhost:27017';
+const mongoUrl = process.env.MONGODB_URI || 'mongodb+srv://Ishita:<db_password>@cluster0.yvd0lxn.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 const client = new MongoClient(mongoUrl);
 const dbName = 'weatherDB';
 
