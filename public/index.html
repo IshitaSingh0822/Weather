@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Main Container -->
+  <div class="container">
+    <!-- App Title -->
+    <h1>🌤️ Weather App</h1>
+    
+    <!-- Search Input Section -->
+    <div class="search-box">
+      <input 
+        type="text" 
+        id="cityInput" 
+        placeholder="Enter city name (e.g., London, Paris, Tokyo)..."
+        autocomplete="off"
+      >
+      <button id="searchBtn">Search</button>
+    </div>
+
+    <!-- Error Message (hidden by default) -->
+    <div id="errorMessage" class="error hidden"></div>
+
+    <!-- Weather Result Card (hidden by default) -->
+    <div id="weatherResult" class="weather-card hidden">
+      <h2 id="cityName"></h2>
+      <img id="weatherIcon" src="" alt="Weather icon">
+      <div class="temperature">
+        <span id="temp"></span>°C
+      </div>
+      <div class="condition" id="condition"></div>
+      <div class="details">
+        <div class="detail-item">
+          <span class="label">💧 Humidity</span>
+          <span id="humidity" class="value"></span>%
+        </div>
+        <div class="detail-item">
+          <span class="label">💨 Wind Speed</span>
+          <span id="windSpeed" class="value"></span> km/h
+        </div>
+      </div>
+    </div>
+
+    <!-- Search History Section -->
+    <div class="history-section">
+      <h3>📜 Recent Searches</h3>
+      <div id="historyList" class="history-list">
+        <p class="no-history">No searches yet. Search for a city to get started!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Link to JavaScript file -->
+  <script src="app.js"></script>
+</body>
+</html>
