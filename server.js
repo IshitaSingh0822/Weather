@@ -13,12 +13,18 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-const mongoUrl = process.env.MONGODB_URI || 'mongodb+srv://Ishita:<db_password>@cluster0.yvd0lxn.mongodb.net/weatherDB?retryWrites=true&w=majority&appName=Cluster0';
-const client = new MongoClient(mongoUrl, {
+
+const rawUri = (process.env.MONGODB_URI || '').trim();
+if (!rawUri || !(rawUri.startsWith('mongodb://') || rawUri.startsWith('mongodb+srv://'))) {
+  console.error('❌ MONGODB_URI is missing or invalid. It must start with "mongodb://" or "mongodb+srv://".');
+  process.exit(1);
+}
+
+const client = new MongoClient(rawUri, {
   serverApi: { version: '1', strict: true, deprecationErrors: true },
   tls: true
-})
-const dbName = 'weatherDB';
+});
+
 
 let db;
 let weatherCollection;
