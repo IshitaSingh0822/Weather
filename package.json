@@ -1,7 +1,7 @@
 
 
 {
-  "engines": { "node": ">=18" },
+ "engines": { "node": "v24.9.0" },
   "name": "weather_app",
   "version": "1.0.0",
   "description": "",
