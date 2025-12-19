@@ -13,18 +13,19 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+// Local MongoDB Configuration
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017';
+const DB_NAME = process.env.DB_NAME || 'weather_app';
 
-const rawUri = (process.env.MONGODB_URI || '').trim();
-if (!rawUri || !(rawUri.startsWith('mongodb://') || rawUri.startsWith('mongodb+srv://'))) {
-  console.error('❌ MONGODB_URI is missing or invalid. It must start with "mongodb://" or "mongodb+srv://".');
-  process.exit(1);
-}
+console.log('📡 Connecting to MongoDB at:', MONGODB_URI);
 
-const client = new MongoClient(rawUri, {
-  serverApi: { version: '1', strict: true, deprecationErrors: true },
-  tls: true
+const client = new MongoClient(MONGODB_URI, {
+  serverApi: { 
+    version: '1', 
+    strict: true, 
+    deprecationErrors: true 
+  }
 });
-
 
 let db;
 let weatherCollection;
@@ -32,11 +33,18 @@ let weatherCollection;
 async function connectToMongoDB() {
   try {
     await client.connect();
+    await client.db('admin').command({ ping: 1 });
     console.log('✅ Connected to MongoDB successfully!');
-    db = client.db(dbName);
+    
+    db = client.db(DB_NAME);
     weatherCollection = db.collection('weather_searches');
+    
+    console.log(`📊 Using database: ${DB_NAME}`);
   } catch (error) {
-    console.error('❌ MongoDB connection error:', error);
+    console.error('❌ MongoDB connection error:', error.message);
+    console.log('\n💡 Make sure MongoDB is running locally:');
+    console.log('   • Run: mongod');
+    console.log('   • Or install MongoDB: https://www.mongodb.com/try/download/community\n');
     process.exit(1);
   }
 }
@@ -212,9 +220,19 @@ app.get('/api/weather/history', async (req, res) => {
   }
 });
 
+// Graceful shutdown
+process.on('SIGINT', async () => {
+  console.log('\n🛑 Shutting down gracefully...');
+  await client.close();
+  console.log('✅ MongoDB connection closed');
+  process.exit(0);
+});
+
 // START SERVER
 connectToMongoDB().then(() => {
   app.listen(PORT, () => {
     console.log(`🚀 Server running on http://localhost:${PORT}`);
+    console.log(`📦 Database: ${DB_NAME}`);
+    console.log(`🌐 Open http://localhost:${PORT} in your browser\n`);
   });
 });
